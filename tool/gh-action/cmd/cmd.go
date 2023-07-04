@@ -87,7 +87,7 @@ func Main(args []string, procInout cli.ProcessInout, env cli.Env) cli.ExitStatus
 			dryRun,
 			ostestable.NewGetwd(),
 			autofix.NewMetaTypeDetector(ostestable.NewIsDir()),
-			autofix.NewMetaCreator(dryRun, meta.RandomGUIDGenerator(), logger),
+			autofix.NewMetaCreatorCustom(dryRun, meta.GUIDGeneratorByName(), logger),
 			autofix.NewMetaRemover(dryRun),
 			logger,
 		),

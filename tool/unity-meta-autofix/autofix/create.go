@@ -47,6 +47,42 @@ func NewMetaCreator(dryRun bool, guidGen meta.GUIDGen, logger logging.Logger) Me
 	}
 }
 
+func NewMetaCreatorCustom(dryRun bool, guidGen meta.GUIDGenByName, logger logging.Logger) MetaCreator {
+	return func(metaType MetaType, missingMeta typedpath.RawPath) error {
+		guid, err := guidGen(string(missingMeta))
+		if err != nil {
+			return err
+		}
+
+		var metaGen meta.Gen
+		switch metaType {
+		case MetaTypeDefaultImporterFolder:
+			metaGen = meta.DefaultImporterFolderGen{GUID: guid}
+		case MetaTypeTextScriptImporter:
+			metaGen = meta.TextScriptImporterGen{GUID: guid}
+		case MetaTypeMonoImporter:
+			metaGen = meta.MonoImporterGen{GUID: guid}
+		case MetaTypeDefaultImporter:
+			metaGen = meta.DefaultImporterGen{GUID: guid}
+		default:
+			return fmt.Errorf("unsupported meta type: %q", metaType)
+		}
+
+		_, err = os.Stat(string(missingMeta))
+		if err == nil {
+			return fmt.Errorf("file exists: %s", missingMeta)
+		}
+		if !os.IsNotExist(err) {
+			return err
+		}
+
+		if dryRun {
+			return createMetaDryRun(missingMeta, metaGen, logger)
+		}
+		return createMeta(missingMeta, metaGen)
+	}
+}
+
 func createMetaDryRun(missingMeta typedpath.RawPath, metaGen meta.Gen, logger logging.Logger) error {
 	buf := &bytes.Buffer{}
 	if _, err := metaGen.WriteTo(buf); err != nil {
@@ -61,7 +97,7 @@ func createMeta(missingMeta typedpath.RawPath, metaGen meta.Gen) error {
 	if err != nil {
 		return err
 	}
-	defer func(){ _ = file.Close() }()
+	defer func() { _ = file.Close() }()
 
 	_, err = metaGen.WriteTo(file)
 	if err != nil {

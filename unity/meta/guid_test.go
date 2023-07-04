@@ -1,6 +1,7 @@
 package meta
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -26,4 +27,30 @@ func TestRandomGUIDGenerator(t *testing.T) {
 		t.Errorf("want nil, got %#v", err)
 		return
 	}
+}
+
+func TestGUIDGeneratorByName(t *testing.T) {
+	guidGen := GUIDGeneratorByName()
+	guid, err := guidGen("test")
+	if err != nil {
+		t.Errorf("want nil, got %#v", err)
+		return
+	}
+	fmt.Println(guid.String())
+
+	guidGen2 := GUIDGeneratorByName()
+	guid2, err := guidGen2("test")
+	if err != nil {
+		t.Errorf("want nil, got %#v", err)
+		return
+	}
+	fmt.Println(guid2.String())
+
+	guidGen3 := GUIDGeneratorByName()
+	guid3, err := guidGen3("test2")
+	if err != nil {
+		t.Errorf("want nil, got %#v", err)
+		return
+	}
+	fmt.Println(guid3.String())
 }

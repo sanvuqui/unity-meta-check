@@ -46,7 +46,7 @@ func NewMain() cli.Command {
 			opts.DryRun,
 			ostestable.NewGetwd(),
 			autofix.NewMetaTypeDetector(ostestable.NewIsDir()),
-			autofix.NewMetaCreator(opts.DryRun, meta.RandomGUIDGenerator(), logger),
+			autofix.NewMetaCreatorCustom(opts.DryRun, meta.GUIDGeneratorByName(), logger),
 			autofix.NewMetaRemover(opts.DryRun),
 			logger,
 		)
