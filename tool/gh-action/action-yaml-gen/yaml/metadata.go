@@ -6,8 +6,8 @@ import (
 
 func BuildMetadata() GHActionsMetadata {
 	return GHActionsMetadata{
-		Name:        "Unity meta files check",
-		Author:      "DeNA Co., Ltd.",
+		Name:        "Unity meta files check (Forked)",
+		Author:      "",
 		Description: "Check missing/dangling meta files",
 		Inputs: []InputDef{
 			StringInputDef{
