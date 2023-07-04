@@ -54,6 +54,8 @@ func NewMetaCreatorCustom(dryRun bool, guidGen meta.GUIDGenByName, logger loggin
 			return err
 		}
 
+		logger.Info(fmt.Sprintf("path: %s, guid: %s", string(missingMeta), guid.String()))
+
 		var metaGen meta.Gen
 		switch metaType {
 		case MetaTypeDefaultImporterFolder:

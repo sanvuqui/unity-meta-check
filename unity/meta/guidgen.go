@@ -2,7 +2,6 @@ package meta
 
 import (
 	"crypto/rand"
-	"fmt"
 	"hash/fnv"
 	mathrand "math/rand"
 )
@@ -35,7 +34,6 @@ func GUIDGeneratorByName() GUIDGenByName {
 		if err != nil {
 			return nil, err
 		}
-		fmt.Printf("path: %s, guid: %s", name, string(bytes))
 
 		return NewGUID(bytes)
 	}
